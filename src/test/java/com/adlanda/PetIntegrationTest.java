@@ -41,7 +41,7 @@ public class PetIntegrationTest {
 
 	@When("Recupero todas las mascotas usando la API REST")
 	public void recupero_todas_las_mascotas_usando_la_api_rest() throws IOException {
-		httpIntegrationTest.sendRequest("GET", "http://localhost:9966/petclinic/api/pets", "empty.txt");
+		httpIntegrationTest.sendRequest("GET", "http://172.20.176.1:9966/petclinic/api/pets", "empty.txt");
 	}
 
 	@Then("el numero de registros recuperados es el mismo")
@@ -63,7 +63,7 @@ public class PetIntegrationTest {
 
 	@When("Inserto el registro de prueba")
 	public void inserto_el_registro_de_prueba() throws IOException {
-		httpIntegrationTest.sendRequest("POST", "http://localhost:9966/petclinic/api/pets", "TestPet.json");
+		httpIntegrationTest.sendRequest("POST", "http://172.20.176.1:9966/petclinic/api/pets", "TestPet.json");
 	}
 
 	@Given("El registro de prueba esta en la base de datos")
@@ -77,6 +77,6 @@ public class PetIntegrationTest {
 	public void elimino_el_registro_de_prueba() throws IOException {
 		jdbcIntegrationTest.sendQuery("SELECT id FROM pets where name='TestPet';");
 		String id = Iterables.get(jdbcIntegrationTest.latestResult.get(0).values(), 0).toString();
-		httpIntegrationTest.sendRequest("DELETE", "http://localhost:9966/petclinic/api/pets/" + id, "empty.txt");
+		httpIntegrationTest.sendRequest("DELETE", "http://172.20.176.1:9966/petclinic/api/pets/" + id, "empty.txt");
 	}
 }
