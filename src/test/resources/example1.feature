@@ -1,4 +1,4 @@
-Feature: Example 0
+Feature: Prueba de la API REST
 
 Scenario: Send a request and check response
 	When I send a "<method>" to URL "<url>" with body "<bodyFile>"
