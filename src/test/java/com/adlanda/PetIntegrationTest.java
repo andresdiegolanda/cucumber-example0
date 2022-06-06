@@ -29,54 +29,55 @@ public class PetIntegrationTest {
 	@Autowired
 	HttpIntegrationTest httpIntegrationTest;
 
-	Long registrosRecuperadosBd;
+	Long recordsRetrievedFromDB;
 
 	String id;
 
-	@Given("Se cuantas mascotas hay en la base de datos")
-	public void se_cuantas_mascotas_hay_en_la_base_de_datos() {
-		jdbcIntegrationTest.sendQuery("SELECT count(*) FROM pets;");
-		registrosRecuperadosBd = (Long) Iterables.get(jdbcIntegrationTest.latestResult.get(0).values(), 0);
+	@Given("I know how many owners are in DB")
+	public void i_know_how_many_owners_are_in_db() {
+		jdbcIntegrationTest.sendQuery("SELECT count(*) FROM owners;");
+		recordsRetrievedFromDB = (Long) Iterables.get(jdbcIntegrationTest.latestResult.get(0).values(), 0);
 	}
 
-	@When("Recupero todas las mascotas usando la API REST")
-	public void recupero_todas_las_mascotas_usando_la_api_rest() throws IOException {
-		httpIntegrationTest.sendRequest("GET", "http://172.20.176.1:9966/petclinic/api/pets", "empty.txt");
+	@When("I retrieve all owners using REST API")
+	public void i_retrieve_all_owners_using_rest_api() throws IOException {
+		httpIntegrationTest.sendRequest("GET", "http://localhost:9966/petclinic/api/owners", "empty.txt");
 	}
 
-	@Then("el numero de registros recuperados es el mismo")
-	public void el_numero_de_registros_recuperados_es_el_mismo() throws JsonMappingException, JsonProcessingException {
+	@Then("the number of retrieved records is the same")
+	public void the_number_of_retrieved_records_is_the_same() throws JsonMappingException, JsonProcessingException {
 		String body = httpIntegrationTest.latestResponse.getBody();
 		ArrayList<LinkedHashMap> pets = new ObjectMapper().readValue(body, ArrayList.class);
-		if (registrosRecuperadosBd != pets.size()) {
+		if (recordsRetrievedFromDB != pets.size()) {
 			throw new RuntimeException(
-					"Should have recovered " + registrosRecuperadosBd + " records, but recovered " + pets.size());
+					"Should have recovered " + recordsRetrievedFromDB + " records, but recovered " + pets.size());
 		}
 	}
 
-	@Given("El registro de prueba no esta en la base de datos")
-	public void el_registro_de_prueba_no_esta_en_la_base_de_datos() {
-		jdbcIntegrationTest.sendQuery("SELECT count(*) FROM pets where name='TestPet';");
-		registrosRecuperadosBd = (Long) Iterables.get(jdbcIntegrationTest.latestResult.get(0).values(), 0);
-		assertEquals(new Long(0L), registrosRecuperadosBd);
+	@Given("Test record is not in DB")
+	public void test_record_is_not_in_db() {
+		jdbcIntegrationTest.sendQuery("SELECT count(*) FROM owners where first_name='TestOwner';");
+		recordsRetrievedFromDB = (Long) Iterables.get(jdbcIntegrationTest.latestResult.get(0).values(), 0);
+		assertEquals(new Long(0L), recordsRetrievedFromDB);
 	}
 
-	@When("Inserto el registro de prueba")
-	public void inserto_el_registro_de_prueba() throws IOException {
-		httpIntegrationTest.sendRequest("POST", "http://172.20.176.1:9966/petclinic/api/pets", "TestPet.json");
+	@When("I insert test record using REST API")
+	public void i_insert_test_record_using_rest_api() throws IOException, InterruptedException {
+		httpIntegrationTest.sendRequest("POST", "http://localhost:9966/petclinic/api/owners", "TestOwner.json");
+		Thread.sleep(1000);
 	}
 
-	@Given("El registro de prueba esta en la base de datos")
-	public void el_registro_de_prueba_esta_en_la_base_de_datos() {
-		jdbcIntegrationTest.sendQuery("SELECT count(*) FROM pets where name='TestPet';");
-		registrosRecuperadosBd = (Long) Iterables.get(jdbcIntegrationTest.latestResult.get(0).values(), 0);
-		assertEquals(new Long(1L), registrosRecuperadosBd);
+	@Given("Test record is in DB")
+	public void test_record_is_in_db() {
+		jdbcIntegrationTest.sendQuery("SELECT count(*) FROM owners where first_name='TestOwner';");
+		recordsRetrievedFromDB = (Long) Iterables.get(jdbcIntegrationTest.latestResult.get(0).values(), 0);
+		assertEquals(new Long(1L), recordsRetrievedFromDB);
 	}
 
-	@When("Elimino el registro de prueba")
-	public void elimino_el_registro_de_prueba() throws IOException {
-		jdbcIntegrationTest.sendQuery("SELECT id FROM pets where name='TestPet';");
+	@When("I delete test record")
+	public void i_delete_test_record() throws IOException {
+		jdbcIntegrationTest.sendQuery("SELECT id FROM owners where first_name='TestOwner';");
 		String id = Iterables.get(jdbcIntegrationTest.latestResult.get(0).values(), 0).toString();
-		httpIntegrationTest.sendRequest("DELETE", "http://172.20.176.1:9966/petclinic/api/pets/" + id, "empty.txt");
+		httpIntegrationTest.sendRequest("DELETE", "http://localhost:9966/petclinic/api/owners/" + id, "empty.txt");
 	}
 }

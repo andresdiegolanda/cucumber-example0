@@ -1,0 +1,18 @@
+{
+  "birthDate": "2022-06-05",
+  "id": 99,
+  "name": "TestPet",
+  "ownerId": 1,
+  "type": {
+    "id": 1,
+    "name": "cat"
+  },
+  "visits": [
+    {
+      "date": "2022-06-05",
+      "description": "rabies shot",
+      "id": 1,
+      "petId": 1
+    }
+  ]
+}

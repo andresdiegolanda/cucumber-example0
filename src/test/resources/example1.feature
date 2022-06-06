@@ -5,5 +5,5 @@ Scenario: Send a request and check response
 	Then the client receives HTTP status code "<statusCode>"
 	And the HTTP response contains message "<responseMessage>"
 Examples:
-|method	|url																			|bodyFile	|responseMessage|statusCode|
-|GET		|http://172.20.176.1:9966/petclinic/api/pets	|empty.txt|birthDate			|200			 |	
+|method	|url										|bodyFile	|responseMessage	|statusCode	|
+|GET	|http://localhost:9966/petclinic/api/pets	|empty.txt	|birthDate			|200		|	

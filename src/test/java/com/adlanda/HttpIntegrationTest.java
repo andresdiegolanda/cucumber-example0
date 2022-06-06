@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -20,6 +22,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 @SpringBootTest
 @Component
 public class HttpIntegrationTest {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(HttpIntegrationTest.class);
 
 	ResponseResults latestResponse;
 
@@ -77,7 +81,7 @@ public class HttpIntegrationTest {
 				return (new ResponseResults(response));
 			}
 		});
-
+		LOGGER.info("latestResponse:{}", latestResponse);
 	}
 
 }

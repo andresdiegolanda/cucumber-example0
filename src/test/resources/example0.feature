@@ -5,5 +5,5 @@ Scenario: Send a query and verify the response
 	Then the response contains message "<resultMessage>"
 	
 Examples:
-|query							|resultMessage	|
-|select * from pets	|Leo						|
+|query					|resultMessage				|
+|select * from pets		|Leo						|

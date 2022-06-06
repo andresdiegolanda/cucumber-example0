@@ -19,7 +19,7 @@ public class WebIntegrationGherkinTest {
 		System.setProperty("webdriver.chrome.driver",
 				"C:\\_dev\\workspace1\\selenium101\\src\\main\\resources\\chromedriver.exe");
 		driver = new ChromeDriver();
-		String baseURL = "http://172.20.176.1:8080";
+		String baseURL = "http://localhost:8080";
 		driver.get(baseURL);
 
 	}
